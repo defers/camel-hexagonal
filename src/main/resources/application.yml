@@ -1,0 +1,14 @@
+camel:
+  rest:
+    binding-mode: json
+    data-format-property:
+      prettyPrint: true
+    enable-cors: true
+    port: "8080"
+    api-context-path: "/api-doc"
+    api-property:
+      api.title: "User API"
+      api.version: "1.0.0"
+  servlet:
+    mapping:
+      context-path: "/api/*"
