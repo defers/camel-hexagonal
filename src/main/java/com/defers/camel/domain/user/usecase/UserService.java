@@ -19,17 +19,18 @@ public class UserService implements UserUseCase {
 
     @Override
     public User create(User user) {
+        user.validate();
         return userRepository.create(user);
     }
 
     @Override
     public User update(int id, User user) {
+        user.validate();
         return userRepository.update(user);
     }
 
     @Override
     public User deleteById(int id) {
-        userRepository.findById(id);
         return userRepository.deleteById(id);
     }
 }

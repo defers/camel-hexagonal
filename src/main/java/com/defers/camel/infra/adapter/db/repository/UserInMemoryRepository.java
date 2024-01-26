@@ -29,16 +29,16 @@ public class UserInMemoryRepository implements UserRepository {
 
     @Override
     public User create(User user) {
-        users.put(user.id(), conversionService.convert(user, UserModel.class));
+        users.put(user.getId(), conversionService.convert(user, UserModel.class));
         return user;
     }
 
     @Override
     public User update(User user) {
-        var id = user.id();
+        var id = user.getId();
         findById(id);
         var userModel = users.get(id);
-        userModel.setName(user.name());
+        userModel.setName(user.getName());
         return user;
     }
 
