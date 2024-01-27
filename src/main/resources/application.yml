@@ -3,7 +3,7 @@ camel:
     binding-mode: json
     data-format-property:
       prettyPrint: true
-    enable-cors: true
+    enable-cors: false
     port: "8080"
     api-context-path: "/api-doc"
     api-property:

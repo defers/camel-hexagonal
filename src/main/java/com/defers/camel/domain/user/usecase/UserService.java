@@ -4,6 +4,7 @@ import com.defers.camel.domain.user.model.User;
 import com.defers.camel.domain.user.port.in.UserUseCase;
 import com.defers.camel.domain.user.port.out.UserRepository;
 import java.util.List;
+import org.springframework.util.Assert;
 
 public class UserService implements UserUseCase {
     private final UserRepository userRepository;
@@ -19,12 +20,14 @@ public class UserService implements UserUseCase {
 
     @Override
     public User create(User user) {
+        Assert.notNull(user, "User can not be null");
         user.validate();
         return userRepository.create(user);
     }
 
     @Override
     public User update(int id, User user) {
+        Assert.notNull(user, "User can not be null");
         user.validate();
         return userRepository.update(user);
     }
