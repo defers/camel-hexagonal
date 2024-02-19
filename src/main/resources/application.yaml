@@ -12,3 +12,12 @@ camel:
   servlet:
     mapping:
       context-path: "/api/*"
+  dataformat:
+    jaxb:
+      object-factory: true
+      fragment: true
+      pretty-print: true
+app:
+  features:
+    soap-route-builder-enabled: false
+    soap-lambda-route-builder-enabled: true

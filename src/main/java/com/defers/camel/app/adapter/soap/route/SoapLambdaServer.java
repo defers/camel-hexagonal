@@ -1,0 +1,35 @@
+package com.defers.camel.app.adapter.soap.route;
+
+import org.apache.camel.LoggingLevel;
+import org.apache.camel.builder.endpoint.LambdaEndpointRouteBuilder;
+import org.apache.camel.model.dataformat.JaxbDataFormat;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+@ConditionalOnProperty(prefix = "app", name = "features.soap-lambda-route-builder-enabled")
+public class SoapLambdaServer {
+
+    private final JaxbDataFormat jaxbDataFormat;
+
+    public SoapLambdaServer(JaxbDataFormat jaxbDataFormat) {
+        this.jaxbDataFormat = jaxbDataFormat;
+    }
+
+    @Bean
+    public LambdaEndpointRouteBuilder soapConsumer() {
+        return rb -> rb.from(rb.cxf("bean:customers"))
+                .transform(rb.simple("${body[0]}"))
+                .log("header operation name: ${header.operationName}")
+                .recipientList(rb.simple("direct:${header.operationName}"));
+    }
+
+    @Bean
+    public LambdaEndpointRouteBuilder soapConsumerUpdateCustomer() {
+        return rb -> rb.from(rb.direct("updateCustomer"))
+                .marshal(jaxbDataFormat)
+                .log(LoggingLevel.INFO, "updateCustomer body: ${body}")
+                .to(rb.jms("queue:camel-update-customer"));
+    }
+}
