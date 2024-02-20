@@ -17,7 +17,22 @@ camel:
       object-factory: true
       fragment: true
       pretty-print: true
+    jackson-xml:
+      enable-jaxb-annotation-module: true
+      pretty-print: true
+  component:
+    activemq:
+      concurrent-consumers: 10
+      max-concurrent-consumers: 20
+      async-consumer: true
+      transacted: true
 app:
   features:
     soap-route-builder-enabled: false
     soap-lambda-route-builder-enabled: true
+jms:
+  redelivery:
+    initial-redelivery-delay: 5000
+    backoff-multiplier: 2
+    maximum-redeliveries: -1
+    maximum-redelivery-delay: 30000
