@@ -30,9 +30,13 @@ app:
   features:
     soap-route-builder-enabled: false
     soap-lambda-route-builder-enabled: true
+tracing:
+  url: http://localhost:4318/v1/traces
 jms:
   redelivery:
     initial-redelivery-delay: 5000
     backoff-multiplier: 2
     maximum-redeliveries: -1
     maximum-redelivery-delay: 30000
+server:
+  port: 8090

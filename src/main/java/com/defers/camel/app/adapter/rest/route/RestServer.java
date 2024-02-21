@@ -7,6 +7,8 @@ import java.util.Objects;
 import org.apache.camel.Exchange;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.http.HttpMethods;
+import org.apache.camel.model.dataformat.JsonLibrary;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -28,6 +30,7 @@ public class RestServer extends RouteBuilder {
         createUser();
         updateUser();
         deleteUser();
+        getAllUsersProxy();
     }
 
     private void deleteUser() {
@@ -120,5 +123,26 @@ public class RestServer extends RouteBuilder {
                 .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.OK.value()))
                 .log("Headers ${headers}")
                 .log("Found users ${body}");
+    }
+
+    private void getAllUsersProxy() {
+        rest(BASE_PATH + "/proxy")
+                .consumes(MediaType.APPLICATION_JSON_VALUE)
+                .produces(MediaType.APPLICATION_JSON_VALUE)
+                .get()
+                .description("Find all users proxy")
+                .outType(UserDto[].class)
+                .to("direct:get-all-users-proxy");
+
+        from("direct:get-all-users-proxy")
+                .routeId("get-all-users-direct-route proxy")
+                .log("Getting all users proxy")
+                .setHeader(Exchange.HTTP_METHOD, constant(HttpMethods.GET))
+                .to("http://localhost:8090/camel-app/users?bridgeEndpoint=true")
+                .unmarshal()
+                .json(JsonLibrary.Jackson, User[].class)
+                .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(HttpStatus.OK.value()))
+                .log("Headers ${headers}")
+                .log("Found users proxy ${body}");
     }
 }

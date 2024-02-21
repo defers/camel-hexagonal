@@ -11,3 +11,14 @@ From shell:
 ```shell
 java -jar camel-<version-number>.jar
 ```
+
+For running OpenTelemetry java agent and export traces to jaeger start app with jvm arguments:
+```shell
+-javaagent:opentelemetry-javaagent.jar
+-Dotel.traces.exporter=otlp
+-Dotel.metrics.exporter=logging
+-Dotel.logs.exporter=logging
+-Dotel.exporter.jaeger.endpoint="http://localhost:14250"
+-Dotel.service.name=camel
+```
+
