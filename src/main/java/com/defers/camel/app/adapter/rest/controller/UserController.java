@@ -20,15 +20,17 @@ public class UserController {
 
     @GetMapping
     public List<User> getUsers(
-            @RequestHeader Map<String, String> headers, @RequestHeader(required = false) String traceparent) {
+            @RequestHeader Map<String, String> headers, @RequestHeader(required = false) String traceparent) throws InterruptedException {
         log.info("Request to camel app controller getUsers");
-        log.info("Trace header: %s".formatted(traceparent));
+        log.info("Trace header: {}", traceparent);
+        Thread.sleep(2000);
         return userUseCase.findAll();
     }
 
     @PostMapping
-    public User create(@RequestBody User user) {
-        log.info("Request to camel app controller create, with body: %s".formatted(user));
+    public User create(@RequestBody User user) throws InterruptedException {
+        log.info("Request to camel app controller create, with body: {}", user);
+        Thread.sleep(2000);
         return userUseCase.create(user);
     }
 }
